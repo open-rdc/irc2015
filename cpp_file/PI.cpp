@@ -63,6 +63,7 @@ void PID(int l_terget, int r_terget){
     r_motor(r_output,r_terget);
     wait(DELTA_T);
     // 20msのウェイトを入れているが，上記の処理があるので実際には20msではない．（誤差を生む要因）
+		// この関数は常に割り込みで動き続けていて，上位層からこれに司令を送るようにすると良いと思います．
 }
 
 //左モータ出力用関数

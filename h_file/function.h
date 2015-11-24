@@ -1,9 +1,10 @@
 ///////////様々な関数や変数を格納する場所///////////
 ////////ここにあるのはどこの関数（cppファイル）でも参照可能////////
 
+#include "color.h"
 //color.cpp
-GLOBAL int color;
-GLOBAL int what_color();        
+//GLOBAL int color;
+//GLOBAL int what_color();        
 
 //servo.cpp
 GLOBAL void servo_ini();

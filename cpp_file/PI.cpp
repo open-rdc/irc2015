@@ -15,6 +15,15 @@ DigitalOut l_ccw(p11);
 void l_motor(float l_speed, int l_terget_speed);
 void r_motor(float r_speed, int r_terget_speed);
 
+/*
+ * @brief 各ホイールを速度制御
+ *
+ * @param[in] l_target 左ホイールの速度 (m/s)
+ * @param[in] r_target 右ホイールの速度(m/s)
+ *
+ * 関数名はvelocity_controlなどとするのが一般的です．
+ * また，速度と回転半径で司令するのが一般的です．
+ */
 void PID(int l_terget, int r_terget){
     float l_speed,r_speed;             //現在の左右のスピード
     float l_hensa,r_hensa;             //左右それぞれの偏差     英語だとよくわからないのでローマ字にした
@@ -53,6 +62,7 @@ void PID(int l_terget, int r_terget){
     l_motor(l_output,l_terget);       
     r_motor(r_output,r_terget);
     wait(DELTA_T);
+    // 20msのウェイトを入れているが，上記の処理があるので実際には20msではない．（誤差を生む要因）
 }
 
 //左モータ出力用関数

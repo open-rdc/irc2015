@@ -4,6 +4,11 @@
 
 DigitalIn ll(p8),l(p7),r(p6),rr(p5);
 
+/*
+ * @brief ライントレースをする関数
+ * 
+  * @param[in] goal 横ラインの本数，この本数だけ通過すると終了
+ */
 void Line_Trace(int goal){
     int e,f,g,h;
     float limit = 0.2;

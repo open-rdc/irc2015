@@ -8,47 +8,47 @@ int main(){     //本走行用  (これから書いていく)
     int color;
     int ball_count = 0;
     bool area_flag = OFF;
-    state = init_state;
+    state = INIT_STATE;
 
     while(1){
         switch(state){
-            case init_state:
+            case INIT_STATE:
                 initialize();
-                state = free_ball;
+                state = FREE_BALL;
                 break;
-            case free_ball:
+            case FREE_BALL:
                 Line_Trace(2);
                 Ball_Shoot();
                 Line_Trace(2);
-                state = ball_search;
+                state = BALL_SEARCH;
                 break;
-            case ball_search:
+            case BALL_SEARCH:
                 serch();
                 if(move_flag){
-                    state = area_move;
+                    state = AREA_MOVE;
                 }
                 else{
                     g_turn(0.0);
                     if(area_flag){
                         Line_Trace(1);
                     }
-                    state = ball_shoot;
+                    state = BALL_SHOOT;
                 }
                 break;
-            case ball_shoot:
+            case BALL_SHOOT:
                 color = what_color();
                 Line_Trace(color);
                 Ball_Shoot();
                 ball_count++;
                 if(ball_count == 15){
-                    state = finish;
+                    state = FINISH;
                 }
                 else{
                     Line_Trace(color);
-                    state = ball_search;
+                    state = BALL_SEARCH;
                 }
                 break;
-            case area_move:
+            case AREA_MOVE:
                 g_turn(180);
                 for(float i = 0; i < 4; i+=DELTA_T){
                     PID(100, 100);
@@ -58,9 +58,9 @@ int main(){     //本走行用  (これから書いていく)
                 }
                 move_flag = OFF;
                 area_flag = ON;
-                state = ball_search;
+                state = BALL_SEARCH;
                 break;
-            case finish:
+            case FINISH:
                 Line_Trace(4 - color);
                 g_turn(0);
                 while(1){
@@ -113,7 +113,7 @@ int main(){     //ボールシュート確認用    (ボールは手動でカップに乗せる)
     initialize();
     
     int ball_count = 0;
-//    state = init_state;
+//    state = INIT_STATE;
 
     while(ball_count < 15){
         wait(1);
@@ -276,17 +276,17 @@ int main(){     //第3回試走会用
     bool area_flag = OFF;
     float serch_posi = 0.0;
     float move_dis = 0.0;
-    state = init_state;
+    state = INIT_STATE;
 //    color = RED;    
     while(1){       //while開始
         switch(state){
-            case init_state:
+            case INIT_STATE:
                 initialize();
-                state = free_ball;
-                //state = ball_search;
+                state = FREE_BALL;
+                //state = BALL_SEARCH;
                 break;
             
-            case free_ball:
+            case FREE_BALL:
                 Line_Trace(3);
                 turn(85.0, FAST);
                 wait(0.5);
@@ -296,10 +296,10 @@ int main(){     //第3回試走会用
                 wait(0.3);
                 turn(-85.0,FAST);
                 Line_Trace(2);
-                state = ball_search;
+                state = BALL_SEARCH;
                 break;
                 
-            case ball_search:
+            case BALL_SEARCH:
                     
                 if(move_flag){
                     while(l_Y <= move_dis)
@@ -319,10 +319,10 @@ int main(){     //第3回試走会用
             
                 wait(0.5);
                 serch();
-                state = ball_shoot;
+                state = BALL_SHOOT;
                 break;
                 
-            case ball_shoot:
+            case BALL_SHOOT:
                 wait(0.5);
                 wait(0.5);
                 color = what_color();
@@ -337,22 +337,22 @@ int main(){     //第3回試走会用
                     Line_Trace(color);
                     ball_count++;
                 }
-                state = ball_search;
+                state = BALL_SEARCH;
                 
                 if(move_flag)
-                    state = area_move;
+                    state = AREA_MOVE;
                 if(ball_count == 15)     //ボールを3個回収したら終了モーションへ
-                    state = finish;
+                    state = FINISH;
                 break;
                 
-            case area_move:
+            case AREA_MOVE:
                 move_dis = 200;
                 serch_posi += move_dis;
                 area_flag = ON;
-                state = ball_search;
+                state = BALL_SEARCH;
                 break;
             
-            case finish:
+            case FINISH:
                 fine();
                 break;
             

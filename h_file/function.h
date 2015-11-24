@@ -19,13 +19,13 @@ GLOBAL void switch_hello();
 
 //switchで使う時の状態を格納，上から0,1,2な感じ
 GLOBAL enum state{
-    init_state,         //初期設定
-    free_ball,          //スタートから探索エリアまで
-    ball_search,        //ボール探索
-    ball_shoot,         //各ボールシュート
-    area_move,          //ボールが見つからない場合、探索エリアを移動
-    finish
-}state;
+    INIT_STATE,         //初期設定
+    FREE_BALL,          //スタートから探索エリアまで
+    BALL_SEARCH,        //ボール探索
+    BALL_SHOOT,         //各ボールシュート
+    AREA_MOVE,          //ボールが見つからない場合、探索エリアを移動
+    FINISH
+} state;
 
 //PSD.cpp
 GLOBAL float Get_PSD_high();

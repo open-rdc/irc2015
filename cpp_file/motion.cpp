@@ -3,14 +3,14 @@
 
 ///*停止用関数
 void stop(){
-    int l = 40, r = 40;
+/*    int l = 50, r = 50;
     //徐々に下げていく感じ
     for(float n = 0.0; n < 0.02; n += DELTA_T){   
         PID(l,r);
         l -= 10;
         r -= 10;
     }
-    for(float i = 0.0; i < 0.2; i += DELTA_T){
+*/    for(float i = 0.0; i < 0.2; i += DELTA_T){
         l_integral=0;   r_integral=0;
         PID(0,0);
     }
@@ -21,10 +21,10 @@ void stop(){
 //ボール発見用関数
 void tansaku(){
     serch_data[1][0] = Get_PSD_low();   serch_data[1][1] = l_theta;
-    float high = Get_PSD_high();
+    float high = 66.294 * pow((double)Get_PSD_high(), -1.218);
     
     //条件は後で変えよう
-    if(high >= 0.4){   //high >= 0.24
+    if(high <= 360){   //high >= 0.24
         if(serch_data[0][0] < serch_data[1][0] ){   //更新
             serch_data[0][0] = serch_data[1][0];
             serch_data[0][1] = serch_data[1][1];
@@ -39,13 +39,13 @@ void turn(float deg, bool mode){
     l_odometry_reset();
     if(mode){       //早い方
         if(l_theta > deg ){
-            while( ( l_theta - deg ) > 4.0){   //右回転
-                PID(200,-200);
+            while( ( l_theta - deg ) > 5.0){   //右回転
+                PID(250,-250);
             }       
         }
         else{
-            while( ( l_theta - deg ) < -4.0){   //左回転
-                PID(-200,200);
+            while( ( l_theta - deg ) < -5.0){   //左回転
+                PID(-250,250);
             }
         }
     }
@@ -94,15 +94,14 @@ void serch(){
     turn(-90,FAST);
     turn(180,SLOW);
     
-    if( serch_data[0][0] == 0.0 ){
+    if( serch_data[0][0] == 0.0){
         turn(-90, FAST);
+        color = NO_BALL;
         move_flag = ON;
+        l_odometry_reset();
     }
-    else{
-        turn(serch_data[0][1]-175,FAST);
-        stop();
+    else
         Ball_Catch();
-    }
 }
 //*/
 
@@ -110,28 +109,40 @@ void serch(){
 //ボールをキャッチする関数
 void Ball_Catch(){
     float serch_dis = 66.294 * pow((double)serch_data[0][0], -1.218);
-    wait(0.5);
     l_odometry_reset();
-    wait(0.5);
+    wait(0.25);
     
-    if(serch_dis <= 350 ){
-       servo_ready();
-       while(l_Y <= serch_dis - 80)
+    if(serch_dis <= 350 ){      //探索エリアの幅的に400は欲しいけど誤差がなぁ...
+        turn(serch_data[0][1]-174,FAST);
+        stop();
+        wait(0.25);
+        servo_ready();
+        while(l_Y <= serch_dis - 80)     //serch_dis - 80
             PID(150, 150);
         stop();
         servo_catch();
         while(l_Y >= 5)
             PID(-150, -150);
         stop();
-        turn(-1 * serch_data[0][1] + 90, FAST);
-        wait(0.5);
+        wait(0.25);
+        color = what_color();
+        if(color != NO_BALL){
+            if(serch_data[0][1] <= 90)
+                turn(-1 * serch_data[0][1] - 90, FAST);     //後ろを向く(右回転)
+            else
+                turn(-1 * serch_data[0][1] + 270, FAST);     //後ろを向く(左回転)
+        }
+        else
+            turn(-1 * serch_data[0][1] + 90, FAST);     //正面を向く
+        wait(0.25);
     }
     else{
-        turn(-92, FAST);
+        turn(-92, FAST);        //-92 は小細工...
+        color = NO_BALL;
         move_flag = ON;
         l_odometry_reset();
-        PSD_reset();
     }
+    PSD_reset();
 }
 //*/
 
@@ -139,34 +150,24 @@ void Ball_Catch(){
 ///*
 //回収用関数
 void Ball_Shoot(){
-    if(color == RED || color == YELLO){     //赤か黄色だったら右を向くよ
+    if(color == RED)     //黄色は青のところから投げるよー
         turn(-80, FAST);  
-    }
-    if(color == BLUE ){                     //青だったら少し前進するよ
-        for(float i = 0.0; i < 1.0; i += DELTA_T){
-            PID(350,350);
-        }
-        stop();
-    }
+    else if(color == YELLO)
+        turn(40, FAST);
     
-    wait(1);
+    wait(0.25);
     servo_throw();
-    wait(1);
+    wait(0.25);
     
-    servo_up2();
-    wait(1);
+    servo_ini();
+    wait(0.25);
     
-    if(color == RED || color == YELLO){
+    if(color == RED)
         turn(-100, FAST);
-        wait(1);
-    }
-    else if( color == BLUE){
-        for(float i = 0.0; i < 1.0; i += DELTA_T){
-            PID(-200,-200);
-        }
-        stop();
+    else if(color == YELLO)
+        turn(140, FAST);
+    else
         turn(180, FAST);
-        wait(1);
-    }
+    wait(0.25);
 }
 //*/

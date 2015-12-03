@@ -20,13 +20,18 @@ void set_servo_angle(unsigned char id, int pos){
 //サーボを一番上に上げてハンドを開く
 void servo_ini(){
     set_servo_angle(SERVO_0,SERVO_0_UPWARD);
-    wait(1);
+    wait(0.25);
     set_servo_angle(SERVO_1,SERVO_1_OPEN);
 }
 
 void servo_throw(){
-    set_servo_angle(SERVO_0,SERVO_0_THROW);
-    wait(1);
+/*    for(int n = SERVO_0_UPWARD; n < SERVO_0_THROW; n += 8){
+        set_servo_angle(SERVO_0,n);
+        wait_ms(1.5);
+    }
+*/
+    set_servo_angle(SERVO_0, SERVO_0_THROW);
+    wait(0.25);
 }
 
 //サーボを下げるだけ
@@ -35,7 +40,7 @@ void servo_ready(){
         set_servo_angle(SERVO_0,n);
         wait_ms(1.5);
     }
-    wait(0.5);
+    wait(0.25);
 }
 
 void servo_up(){
@@ -43,22 +48,33 @@ void servo_up(){
         set_servo_angle(SERVO_0,n);
         wait_ms(1.5);
     }
-    wait(0.5);
+    wait(0.25);
 }
 
+/*
 void servo_up2(){
     for(int n = SERVO_0_THROW; n > SERVO_0_UPWARD; n -= 5){
         set_servo_angle(SERVO_0,n);
         wait_ms(1.5);
     }
-    wait(0.5);
+    wait(0.25);
 }
+*/
 
 //ボールをキャッチして上にしてポケットにボールを入れるまで
 void servo_catch(){
     set_servo_angle(SERVO_1,SERVO_1_CLOSE);
-    wait(0.5);
+    wait(0.25);
     servo_up();
     set_servo_angle(SERVO_1,SERVO_1_OPEN);
-    wait(0.5);
+    wait(0.25);
+}
+
+void servo_performance(){
+    for(int i = 0; i < B_GOAL; i++){
+        set_servo_angle(SERVO_1,SERVO_1_CLOSE);
+        wait(0.5);
+        set_servo_angle(SERVO_1,SERVO_1_OPEN);
+        wait(0.5);
+    }
 }

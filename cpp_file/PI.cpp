@@ -37,10 +37,10 @@ void PID(int l_terget, int r_terget){
     r_integral += r_hensa * DELTA_T;
     
     //積分上限の設定
-    if(l_integral >= 1000)    l_integral = 1000;
-    if(l_integral < -1000)    l_integral = -1000;
-    if(r_integral >= 1000)    r_integral = 1000;
-    if(r_integral < -1000)    r_integral = -1000;
+    if(l_integral >= 600)    l_integral = 600;
+    if(l_integral < -600)    l_integral = -600;
+    if(r_integral >= 600)    r_integral = 600;
+    if(r_integral < -600)    r_integral = -600;
     
     //出力の計算
     //この段階でデューティー比にしている

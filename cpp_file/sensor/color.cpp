@@ -2,7 +2,6 @@
 
 I2C colorSensor(p9,p10);
 int R,G,B,IR;       //赤，緑,青，赤外
-
 //途中にあるwaitはおそらく最低1秒はほしいかなー
 //短いと値取得が不可能だった
 
@@ -56,7 +55,8 @@ void  get_color_value() {
         
     for(int i=0; i<8; i=i+2){
         tmp = data[i] << 8;  //16bitで出すため8bitシフト
-        tmp += data[i+1];  
+        tmp += data[i+1];
+        //printf("%d\t",tmp);  
         if(i== 0){
             R = tmp;
         }else if(i == 2){
@@ -73,28 +73,30 @@ void  get_color_value() {
 //センサで取得した値から何色かを識別する関数
 int what_color(){
     get_color_value();
-    if(IR > 40){
+    if(IR > 30){
         //ボールを持っているかの確認
+        //printf("\tno_ball\n");
         return NO_BALL;
        
     }
     else{
-        if(R > 50 && G > 30 && B < 50){
+        if(R > 35 && G < 40 && B < 35){
             //赤色だよー
-           // printf("\tred\n");
+            //printf("\tred\n");
             return RED;
         }
-        
+        else if(R < 30 && G < 35 && B < 35){      //if( R < 50 && G > 30 && B > 50)
+            //青色だよー
+            //
+            //printf("\tblue\n");
+            return BLUE;
+        }
         //ここの閾値がなんかなー
-        else if(R > 90 && G > 100 && B > 40){       // if(R > 90 && G > 100 && B > 40)
+        else{ //if(R > 50 && G > 50 && B > 20){       // if(R > 90 && G > 100 && B > 40)
             //それ以外は黄色じゃね？
             //printf("\tyello\n");
             return YELLO;
         }
-        else {      //if( R < 50 && G > 30 && B > 50)
-            //青色だよー
-            //printf("\tblue\n");
-            return BLUE;
-        }
+        
     }
 }

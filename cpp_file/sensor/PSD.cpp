@@ -26,7 +26,7 @@ float Get_PSD_high() {
     
     qsort(data, NUM, sizeof(float), float_sort);
 
-    return data[1];
+    return data[(NUM - 1) / 2];
 }
 
 float Get_PSD_low() {
@@ -39,7 +39,7 @@ float Get_PSD_low() {
     
     qsort(data, NUM, sizeof(float), float_sort);
 
-    return data[1];
+    return data[(NUM - 1) / 2];
 }
 
 void PSD_reset(){

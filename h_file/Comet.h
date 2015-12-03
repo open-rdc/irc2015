@@ -2,7 +2,7 @@
 #include "robo_para.h"  //ロボットのパラメータ
 #include "define.h"     //その他変数用
 
-//疑似命令
+//詳しくはread_me.txt参照
 #ifdef GLOBAL_INSTANCE
 #define GLOBAL
 #else
